@@ -211,8 +211,14 @@ export function CustomerForm({
                     const assignedBranchIds = [
                         ...new Set(finalCenters.map((c: any) => c.branch_id)),
                     ];
+
+                    // Also include the user's primary branch
+                    if (user.branch?.id) {
+                        assignedBranchIds.push(user.branch.id);
+                    }
+
                     finalBranches = data.branches.filter((b: any) =>
-                        assignedBranchIds.includes(b.id)
+                        [...new Set(assignedBranchIds)].includes(b.id)
                     );
 
                     // Auto-select if there's only one branch
@@ -705,7 +711,7 @@ export function CustomerForm({
                                 <ShieldCheck size={12} className="text-primary-500" />
                                 <p className="text-[9px] text-primary-500 font-black uppercase tracking-widest">
                                     This customer has active loans. Edits will require Manager
-                                approval.
+                                    approval.
                                 </p>
                             </div>
                         )}
@@ -713,7 +719,7 @@ export function CustomerForm({
                             <div className="flex items-center gap-2 bg-amber-500/10 px-3 py-1.5 rounded-xl mt-3 inline-flex border border-amber-500/10">
                                 <ShieldCheck size={12} className="text-amber-500" />
                                 <p className="text-[9px] text-amber-500 font-black uppercase tracking-widest">
-                                ⚠️ A change request is already pending for this customer.                                </p>
+                                    ⚠️ A change request is already pending for this customer.                                </p>
                             </div>
                         )}
                     </div>
